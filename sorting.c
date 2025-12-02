@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "stack_logic.h"
-#include "sorting.h"
 
 int direct_inlusion_sort(element **s_s){
     if(s_s == NULL){
@@ -33,4 +32,65 @@ int direct_inlusion_sort(element **s_s){
     }
     return 0;
 
+}
+
+
+// -----------------------------------------------------------------
+
+
+element* get_middle(element *head) {
+    if (!head) return NULL;
+    element *slow = head;
+    element *fast = head->next;
+
+    while (fast && fast->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+    return slow;
+}
+
+
+element* merge(element *left, element *right) {
+    if (!left) return right;
+    if (!right) return left;
+
+    element dummy = {0, NULL};
+    element *tail = &dummy;
+
+    while (left && right) {
+        if (left->data <= right->data) {
+            tail->next = left;
+            left = left->next;
+        } else {
+            tail->next = right;
+            right = right->next;
+        }
+        tail = tail->next;
+    }
+
+    tail->next = left ? left : right;
+    return dummy.next;
+}
+
+
+int merge_sort_stack(element **se) {
+    if (!se || !*se || !(*se)->next){
+        return 1;
+    }
+
+    element *mid = get_middle(*se);
+    
+    
+    element *right_head = mid->next;
+    mid->next = NULL;
+    
+    element *left_head = *se;
+
+    
+    merge_sort_stack(&left_head);
+    merge_sort_stack(&right_head);
+
+    *se = merge(left_head, right_head);
+    return 0;
 }
