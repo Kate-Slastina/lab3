@@ -6,6 +6,7 @@
 #include "file_work.h"
 #include "sys_funcs.h"
 #define MAX_RAND_NUM 10000
+#define MAX_STACK_ITEMS 50000
 
 int push(element** s_s, int value){
     if (s_s == NULL){
@@ -128,10 +129,10 @@ int main_logic(){
             case 2:
                 do{
                     value_input(&value, count_text);
-                    if(value > 50000){
+                    if(value > MAX_STACK_ITEMS){
                         printf("Слишком долго заполняться будет, выбери число поменьше\n");
                     }
-                }while(value > 50000);
+                }while(value > MAX_STACK_ITEMS);
                 for(int i = 0; i < value; i++){
                     rand_num = rand()%MAX_RAND_NUM;
                     check = push(&stack_start, rand_num);
@@ -184,7 +185,11 @@ int main_logic(){
         }
         clear_screen();
     }
-
+    if(stack_start == NULL){
+        printf("Stack пуст, в сортировке нет смысла.");
+        check = save_to_file("data.txt", "w", NULL);
+        return 0;
+    }
     check = save_to_file("data.txt", "w", stack_start);
     if(check != 0){
         return check;
@@ -211,7 +216,7 @@ int main_logic(){
                 save_flag = 1;
                 break;
             case 2:
-                check = direct_inlusion_sort(&stack_start);
+                check = merge_sort_stack(&stack_start);
                 if(check == 0){
                     printf("Сортировка выполнена успешно.");
                 }

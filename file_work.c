@@ -2,9 +2,13 @@
 #include "file_work.h"
 #include "sys_funcs.h"
 
-#define IS_HEADER(s) \
+#define IS_SYSTEM_HEADER(s) \
     (my_strcmp("===START_OF_SAVE===", (s)) == 0 || \
      my_strcmp("===END_OF_SAVE===", (s)) == 0)
+
+#define IS_HUMAN_HEADER(s) \
+    (my_strcmp("===STACK===", (s)) == 0 || \
+     my_strcmp("===SORTED_STACK===", (s)) == 0)
 
 
 int save_to_file(char *file_name, const char *method, element *stack_start){
@@ -18,18 +22,16 @@ int save_to_file(char *file_name, const char *method, element *stack_start){
         fprintf(file, "===START_OF_SAVE===\n");
         fprintf(file, "===STACK===\n");
         while(stack_start != NULL){
-            fprintf(file, "%d ", stack_start->data);
+            fprintf(file, "%d\n", stack_start->data);
             stack_start = stack_start->next;
         }
-        fprintf(file, "\n");
     }
     else{
         fprintf(file, "===SORTED_STACK===\n");
         while(stack_start != NULL){
-            fprintf(file, "%d ", stack_start->data);
+            fprintf(file, "%d\n", stack_start->data);
             stack_start = stack_start->next;
         }
-        fprintf(file, "\n");
         fprintf(file, "===END_OF_SAVE===\n");
     }
     fclose(file);
@@ -38,9 +40,9 @@ int save_to_file(char *file_name, const char *method, element *stack_start){
 
 
 int read_file(char *file_name){
-    char result[64];
+    char result[20];
     FILE *file = fopen(file_name, "r");
-    printf("Прошлые данные:\n");
+    printf("Прошлые данные:");
     if (file == NULL) {
         printf("Ошибка открытия файла в read_file");
         return 1;
@@ -48,10 +50,14 @@ int read_file(char *file_name){
     do{
         fgets(result, sizeof(result), file);
         remove_n(result);
-        if(IS_HEADER(result)){
+        if(IS_SYSTEM_HEADER(result)){
             continue;
         }
-        printf("%s\n", result);
+        if(IS_HUMAN_HEADER(result)){
+            printf("\n%s\n", result);
+            continue;
+        }
+        printf("%s ", result);
     }while(my_strcmp("===END_OF_SAVE===", result));
     clear_input();
     clear_screen();
