@@ -103,15 +103,16 @@ element* copy_stack(element* original) {
 
 int main_logic(){
     int choice = 0, value = 0, check = 0, rand_num = 0, save_flag = 0;
-    char value_text[] = "Введи значение для вставки\n>", count_text[] = "Введи количество значений для вставки\n>"; 
+    char value_text[] = "Введи значение для вставки\n>", count_text[] = "Введи количество значений для вставки\n>", test_data_text[]="Выберите обьем данных:\n[1] Малый обьем(100 чисел)\n[2] Средний обьем(1000 чисел)\n[3] Большой обьем(5000 чисел)\n>";
     element*  stack_start=NULL;
-    while(choice != 6){
+    while(choice != 7){
         printf("[1] - добавить число в стек \n");
         printf("[2] - заполнить стек рандомными элементами \n");
         printf("[3] - удалить число из стека \n");
-        printf("[4] - очистить стек \n");
-        printf("[5] - вывести стек \n");
-        printf("[6] - закончить ввод стека \n>");
+        printf("[4] - вывести в стек тестовые данные\n");
+        printf("[5] - очистить стек \n");
+        printf("[6] - вывести стек \n");
+        printf("[7] - закончить ввод стека \n>");
         scanf("%d", &choice);
         clear_input();
         switch(choice){
@@ -159,6 +160,27 @@ int main_logic(){
                 }
                 break;
             case 4:
+                do{
+                    value_input(&value, test_data_text);
+                    if(value > 3 || value < 1){
+                        printf("Неверное значение\n");
+                    }
+                }while(value > 3 || value < 1);
+                switch(value){
+                    case 1:
+                        read_from_file("small_data.txt", &stack_start);
+                        break;
+                    case 2:
+                        read_from_file("medium_data.txt", &stack_start);
+                        break;
+                    case 3:
+                        read_from_file("big_data.txt", &stack_start);
+                        break;
+                    default:
+                        break;
+                }
+                break;
+            case 5:
                 check = clear(&stack_start);
                 if(check == 0){
                     printf("Стек очищен.");
@@ -167,21 +189,21 @@ int main_logic(){
                     return 1;
                 }
                 break;
-            case 5:
+            case 6:
                 check = show(&stack_start);
                 if(check != 0){
                     clear(&stack_start);
                     return 1;
                 }
                 break;
-            case 6:
+            case 7:
                 break;
             default:
                 printf("Такого варианта нема...");
                 break;
         }
-        if(choice != 6){
-        clear_input();
+        if(choice != 4 && choice != 7){
+            clear_input();
         }
         clear_screen();
     }
@@ -245,7 +267,6 @@ int main_logic(){
                 printf("Слиянием:  %.6f с\n", (double)t2 / CLOCKS_PER_SEC);
                 clear(&copy1);
                 clear(&copy2);
-                clear_input();
                 break;
             case 4:
                 check = show(&stack_start);

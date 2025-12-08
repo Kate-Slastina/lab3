@@ -1,9 +1,11 @@
 #include <stdio.h>
 #include "file_work.h"
+#include "stack_logic.h"
 #include "sys_funcs.h"
 
 #define IS_SYSTEM_HEADER(s) \
     (my_strcmp("===START_OF_SAVE===", (s)) == 0 || \
+     my_strcmp("===END_OF_DATA===", (s)) == 0 || \
      my_strcmp("===END_OF_SAVE===", (s)) == 0)
 
 #define IS_HUMAN_HEADER(s) \
@@ -61,6 +63,35 @@ int read_file(char *file_name){
     }while(my_strcmp("===END_OF_SAVE===", result));
     clear_input();
     clear_screen();
+    fclose(file);
+    return 0;
+    
+}
+
+
+int read_from_file(char *file_name, element **stack_start){
+    char result[20];
+    int value = 0, i = 0;
+    FILE *file = fopen(file_name, "r");
+    if (file == NULL) {
+        printf("Ошибка открытия файла в read_file");
+        return 1;
+    }
+    do{
+        fgets(result, sizeof(result), file);
+        remove_n(result);
+        if(IS_SYSTEM_HEADER(result)){
+            continue;
+        }
+        value = 0;
+        i = 0;
+        while(result[i] != '\0'){
+            value *= 10;
+            value += result[i] - '0';
+            i++;
+        }
+        push(stack_start, value);
+    }while(my_strcmp("===END_OF_DATA===", result));
     fclose(file);
     return 0;
     

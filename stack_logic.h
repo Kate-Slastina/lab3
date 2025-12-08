@@ -8,6 +8,6 @@ typedef struct el{
 
 
 
-
+int push(element** s_s, int value);
 int main_logic();
 #endif
