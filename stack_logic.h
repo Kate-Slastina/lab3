@@ -6,5 +6,8 @@ typedef struct el{
     struct el* next;
 }element;
 
+
+
+
 int main_logic();
 #endif

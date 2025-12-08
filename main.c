@@ -12,7 +12,7 @@ int main(int argc, char *argv[]){
         printf("Неподходящее количество параметров на входе.");
         return 0;
     }
-    srand(time(NULL));
+    srand(time(NULL));// cемя генерации, выстраивания под рандомные подпоследоватенльности
     if(argc == 3 && my_strcmp(argv[1], "--file") == 0){
         check = read_file(argv[2]);
         if(check == 1){

@@ -188,6 +188,7 @@ int main_logic(){
     if(stack_start == NULL){
         printf("Stack пуст, в сортировке нет смысла.");
         check = save_to_file("data.txt", "w", NULL);
+        check = save_to_file("data.txt", "a", NULL);
         return 0;
     }
     check = save_to_file("data.txt", "w", stack_start);
