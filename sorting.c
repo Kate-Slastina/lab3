@@ -38,10 +38,10 @@ int direct_inlusion_sort(element **s_s){
 // -----------------------------------------------------------------
 
 
-element* get_middle(element *head) {
-    if (!head) return NULL;
-    element *slow = head;
-    element *fast = head->next;
+element* get_middle(element *se) {
+    if (!se) return NULL;
+    element *slow = se;
+    element *fast = se->next;
 
     while (fast && fast->next) {
         slow = slow->next;
@@ -69,7 +69,12 @@ element* merge(element *left, element *right) {
         tail = tail->next;
     }
 
-    tail->next = left ? left : right;
+    if (left){
+        tail->next = left;
+    }
+    else{
+        tail->next = right;
+    }
     return dummy.next;
 }
 
