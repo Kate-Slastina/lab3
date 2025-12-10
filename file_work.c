@@ -18,6 +18,9 @@ int save_to_file(char *file_name, const char *method, element *stack_start){
     if (file == NULL) {
         printf("Ошибка открытия файла\n");
         clear_input();
+
+
+        
         return 1;
     }
     if(my_strcmp(method, "w") == 0){
